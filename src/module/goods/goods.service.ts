@@ -1,7 +1,4 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { AuthorizationEntity } from "../auth/entitiies/authorization.entity";
 const https = require('https');
 import { lastValueFrom } from 'rxjs';
 import { HttpService } from "@nestjs/axios";

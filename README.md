@@ -7,7 +7,8 @@
  * @Description:
 -->
 
-# mcloud_server
+# tf_goods_server
 
-<p>Q-battery 服务端</p>
+<p>TF_Goods 服务端</p>
 <p>技术栈：nest.js + TypeORM + Swagger</p>
+<p>执行 yarn build 之后再重启服务</p>
