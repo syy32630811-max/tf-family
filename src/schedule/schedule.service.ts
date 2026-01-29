@@ -23,7 +23,7 @@ export class TimingTaskService {
     const notNeedSkuIds = [2751, 2758, 2757, 2756, 2755, 2754, 2753, 2752, 1733, 1732, 342, 340, 337, 2815, 2816, 2817, 2818, 2819, 2820, 2821, 2822, 2823, 2824, 2825, 2826, 2827, 2828, 2829, 2830]
     const token = await this.authService.getToken();
     // 获取商品列表
-    const goodsList = await this.goodService.getGoodsList(token);
+    const goodsList = await this.goodService.getAllTNTGoodsList(token);
     if (!goodsList) {
       return
     }

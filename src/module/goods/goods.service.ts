@@ -79,8 +79,25 @@ export class GoodsService {
   /**
    * @desc 获取商品列表
    */
-
-  async getGoodsList(token: string) {
+  async getAllTNTGoodsList(token: string) {
+    let pageNum = 1;
+    let list = []
+    let flag = true
+    while (flag) {
+      const res = await this.getGoodsList(token, pageNum)
+      if (res.length < 10) {
+        flag = false
+      }
+      for (const item of res) {
+        if (item.classId === 38) {
+          list.push(item)
+        }
+      }
+      pageNum++
+    }
+    return list;
+  }
+  async getGoodsList(token: string, pageNum: number) {
     try {
       const options = {
         'method': 'POST',
@@ -102,10 +119,10 @@ export class GoodsService {
         data: {
           "companyId": 2,
           "orgId": 35,
-          "salesClassId": 3,
+          "salesClassId": 4, // 3: 时代少年团 4: 全部
           "sortFieldType": 0,
           "sortType": 0,
-          "pageNum": 1,
+          "pageNum": pageNum,
           "pageSize": 10,
           "applyType": 1
         }
@@ -116,7 +133,7 @@ export class GoodsService {
         return response.data.data && response.data.data.records
       }
     } catch(e) {
-      await this.getGoodsList(token)
+      await this.getGoodsList(token, pageNum)
     }
   }
 
