@@ -96,7 +96,7 @@ export class GoodsService {
         flag = false
       }
       for (const item of res) {
-        if (item.classId === 38) {
+        if (item.name.includes('时代少年团')) {
           list.push(item)
         }
       }
