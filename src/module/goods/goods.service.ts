@@ -15,8 +15,12 @@ export class GoodsService {
   async submitOrder(data: {
     skuId: number,
     sellPrice: number
-  }, token: string) {
+  }, token: string, count = 1) {
+    console.log('submitOrder count: ', count)
     try {
+      if (count > 10) {
+        return false;
+      }
       const options = {
         'method': 'POST',
         'url': 'https://app.tfent.cn/place-order/mallOrder/placeOrder',
@@ -72,7 +76,10 @@ export class GoodsService {
         return response.data.data
       }
     } catch(e) {
-      await this.submitOrder(data, token)
+      console.log(e)
+      await this.sleep(100)
+      count++
+      await this.submitOrder(data, token, count)
     }
   }
 
@@ -97,8 +104,11 @@ export class GoodsService {
     }
     return list;
   }
-  async getGoodsList(token: string, pageNum: number) {
+  async getGoodsList(token: string, pageNum: number, count = 1) {
     try {
+      if (count > 10) {
+        return []
+      }
       const options = {
         'method': 'POST',
         'url': 'https://app.tfent.cn/goods/salesClassInfo/appRelationGoodsList',
@@ -133,15 +143,20 @@ export class GoodsService {
         return response.data.data && response.data.data.records
       }
     } catch(e) {
-      await this.getGoodsList(token, pageNum)
+      await this.sleep(100)
+      count++
+      await this.getGoodsList(token, pageNum, count)
     }
   }
 
   /**
    * @desc 获取商品详情
    */
-  async getGoodsDetail(spuCode: string, token: string) {
+  async getGoodsDetail(spuCode: string, token: string, count = 1) {
     try {
+      if (count > 10) {
+        return null
+      }
       const options = {
         'method': 'POST',
         'url': 'https://app.tfent.cn/goods/shelves/getShelvesBySpuCode',
@@ -172,7 +187,9 @@ export class GoodsService {
         return response.data.data
       }
     } catch(e) {
-      await this.getGoodsDetail(spuCode, token)
+      await this.sleep(100)
+      count++
+      await this.getGoodsDetail(spuCode, token, count)
     }
   }
 
@@ -182,8 +199,11 @@ export class GoodsService {
    * @param token 
    * @returns 
    */
-  async verification(skuId: number, token: string) {
+  async verification(skuId: number, token: string, count = 1) {
     try {
+      if (count > 10) {
+        return false
+      }
       const options = {
         'method': 'POST',
         'url': 'https://app.tfent.cn/mall/mallOrder/verification',
@@ -209,7 +229,9 @@ export class GoodsService {
         return response.data.data
       }
     } catch(e) {
-      await this.verification(skuId, token)
+      await this.sleep(100)
+      count++
+      await this.verification(skuId, token, count)
     }
   }
 
@@ -242,5 +264,47 @@ export class GoodsService {
     } catch(e) {
       await this.getAddressList(token)
     }
+  }
+
+  async getOrderList(token: string, count = 1) {
+    try {
+      if (count > 10) {
+        return []
+      }
+      const options = {
+        'method': 'POST',
+        'url': 'https://app.tfent.cn/sale-order/saleOrderManager/mobile/pageQueryV2',
+        'headers': {
+           'syscode': 'tf',
+           'Authorization': token,
+           'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+           "searchName": "",
+           "state": 0,
+           "tabType": 4,
+           "pageNum": 1,
+           "pageSize": 10,
+           "timeValue": null,
+           "sortFiled": 3,
+           "sortType": 2,
+           "dataRange": 1
+        })
+     
+     };
+      const response: any = await lastValueFrom(this.httpService.request(options));
+      Logger.log('getOrderList request')
+      if (response.data.code == 200) {
+        return response.data.data && response.data.data.records
+      }
+    } catch(e) {
+      await this.sleep(100)
+      count++
+      await this.getOrderList(token, count)
+    }
+  }
+
+  async sleep(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }

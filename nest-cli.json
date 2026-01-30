@@ -3,5 +3,9 @@
   "sourceRoot": "src",
   "webpack": false,
   "tsc": true,
-  "sourceMap": false
+  "sourceMap": false,
+  "compilerOptions": {
+    "webpack": true,
+    "incremental": true
+  }
 }

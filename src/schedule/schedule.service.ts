@@ -13,7 +13,7 @@ export class TimingTaskService {
   ) { }
 
   // @Cron(new Date(Date.now() + 3 * 1000)) // 服务启动 3 秒后运行
-  @Cron('0 0 9-21 * * 0,6') // 每周六、周日 9-21 整点执行
+  // @Cron('0 0 9-21 * * 0,6') // 每周六、周日 9-21 整点执行
   async handleCron() {
     // 确定不需要购买的商品，不限量/一直有链接的商品
     /**

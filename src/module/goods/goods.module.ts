@@ -9,11 +9,13 @@
 import { Module } from '@nestjs/common';
 import { GoodsService } from './goods.service';
 import { HttpModule } from '@nestjs/axios';
+import { GoodsController } from './goods.controller';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [HttpModule],
+  imports: [HttpModule, AuthModule],
   providers: [GoodsService],
-  controllers: [],
+  controllers: [GoodsController],
   exports: [GoodsService],
 })
 export class GoodsModule {}
